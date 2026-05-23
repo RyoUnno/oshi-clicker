@@ -193,7 +193,7 @@ export const upgrades: Upgrade[] = [
     baseCost: 150,
     costMultiplier: 1.28,
     effectType: "fansPerSecond",
-    effectValue: 0.5
+    effectValue: 0.05
   },
   {
     id: "sns_post",
@@ -202,7 +202,7 @@ export const upgrades: Upgrade[] = [
     baseCost: 1000,
     costMultiplier: 1.3,
     effectType: "fansPerSecond",
-    effectValue: 2
+    effectValue: 0.2
   },
   {
     id: "official_fanclub",
@@ -211,7 +211,7 @@ export const upgrades: Upgrade[] = [
     baseCost: 8000,
     costMultiplier: 1.32,
     effectType: "fansPerSecond",
-    effectValue: 8
+    effectValue: 0.8
   },
 
   // ── 全体倍率 ────────────────────────────────
