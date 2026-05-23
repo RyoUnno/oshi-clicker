@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { StatusBar } from "./components/StatusBar";
 import { CharacterTapArea } from "./components/CharacterTapArea";
 import { UpgradePanel } from "./components/UpgradePanel";
@@ -10,7 +10,9 @@ import { UnlockModal } from "./components/UnlockModal";
 import { useGameState } from "./hooks/useGameState";
 import { useAudio } from "./hooks/useAudio";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { upgrades as upgradeList } from "./config/upgrades";
 import type { Settings } from "./types/game";
+import type { AutoSource } from "./components/CharacterTapArea";
 import { idleVoiceIntervalMs } from "./config/voiceAssets";
 import "./styles.css";
 
@@ -37,6 +39,25 @@ export function App() {
     soundEnabled: true,
     voiceEnabled: true
   });
+
+  const autoSources = useMemo<AutoSource[]>(() => {
+    return upgradeList
+      .filter(
+        (u) =>
+          (state.upgrades[u.id] ?? 0) > 0 &&
+          (u.effectType === "pointsPerSecond" || u.effectType === "fansPerSecond")
+      )
+      .map((u) => {
+        const level = state.upgrades[u.id] ?? 0;
+        const amount = u.effectValue * level * stats.globalMultiplier;
+        return {
+          id: u.id,
+          name: u.name,
+          amount,
+          type: u.effectType as AutoSource["type"],
+        };
+      });
+  }, [state.upgrades, stats.globalMultiplier]);
 
   const audio = useAudio(settings);
   const [tab, setTab] = useState<TabId>("home");
@@ -99,6 +120,7 @@ export function App() {
               isPcGlowing={isPcGlowing}
               isFever={isFever}
               onActivateFever={activateFever}
+              autoSources={autoSources}
             />
           )}
           {tab === "upgrades" && <UpgradePanel state={state} onBuy={handleBuy} />}

@@ -13,7 +13,14 @@ export function FloatingText({ items }: Props) {
           className={`float-item ${it.kind}`}
           style={{ left: it.x, top: it.y }}
         >
-          {it.emoji ?? it.text}
+          {it.kind === "auto" ? (
+            <>
+              <span className="float-amount">{it.text}</span>
+              {it.label && <span className="float-label">{it.label}</span>}
+            </>
+          ) : (
+            it.emoji ?? it.text
+          )}
         </span>
       ))}
     </div>

@@ -44,9 +44,10 @@ export interface DerivedStats {
 
 export interface FloatingTextItem {
   id: number;
-  x: number;
-  y: number;
+  x: number | string;
+  y: number | string;
   text: string;
-  kind: "point" | "particle";
+  kind: "point" | "particle" | "auto";
   emoji?: string;
+  label?: string;
 }

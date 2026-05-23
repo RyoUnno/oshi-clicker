@@ -5,12 +5,20 @@ import type { CharacterKey } from "../config/imageAssets";
 import { formatNumber } from "../utils/formatNumber";
 import type { FloatingTextItem } from "../types/game";
 
+export interface AutoSource {
+  id: string;
+  name: string;
+  amount: number;
+  type: "pointsPerSecond" | "fansPerSecond";
+}
+
 interface Props {
   costumeId: string;
   onTap: (x: number, y: number) => { gained: number };
   isPcGlowing: boolean;
   isFever: boolean;
   onActivateFever: () => void;
+  autoSources: AutoSource[];
 }
 
 const PARTICLE_EMOJIS = ["💖", "⭐", "✨", "🌟", "💫"];
@@ -26,7 +34,7 @@ function randomBubbleStyle() {
   return { fromRight, startSide, startY, driftY, duration };
 }
 
-export function CharacterTapArea({ costumeId, onTap, isPcGlowing, isFever, onActivateFever }: Props) {
+export function CharacterTapArea({ costumeId, onTap, isPcGlowing, isFever, onActivateFever, autoSources }: Props) {
   const [pressed, setPressed] = useState(false);
   const [items, setItems] = useState<FloatingTextItem[]>([]);
   const idRef = useRef(0);
@@ -45,7 +53,40 @@ export function CharacterTapArea({ costumeId, onTap, isPcGlowing, isFever, onAct
     prevFeverRef.current = isFever;
   }, [isFever]);
 
-  // 泡のスケジューリング（PCグロー信号を泡出現に流用）
+  // 自動加算フローティングテキスト（毎秒）
+  const autoSourcesRef = useRef(autoSources);
+  useEffect(() => { autoSourcesRef.current = autoSources; }, [autoSources]);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      const sources = autoSourcesRef.current;
+      if (sources.length === 0) return;
+      const count = sources.length;
+      const newItems: FloatingTextItem[] = sources.map((src, i) => {
+        const xPct = count === 1
+          ? 35 + Math.random() * 30
+          : 15 + (i / (count - 1)) * 70 + (Math.random() - 0.5) * 12;
+        const yPct = 42 + Math.random() * 22;
+        const emoji = src.type === "pointsPerSecond" ? "💫" : "👥";
+        return {
+          id: ++idRef.current,
+          x: `${xPct}%`,
+          y: `${yPct}%`,
+          text: `${emoji} +${formatNumber(src.amount)}/s`,
+          label: src.name,
+          kind: "auto" as const,
+        };
+      });
+      setItems((prev) => [...prev, ...newItems]);
+      const ids = newItems.map((it) => it.id);
+      window.setTimeout(() => {
+        setItems((prev) => prev.filter((p) => !ids.includes(p.id)));
+      }, 1400);
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, []);
+
+
   useEffect(() => {
     if (isPcGlowing && !isFever && !bubble) {
       setBubble(randomBubbleStyle());

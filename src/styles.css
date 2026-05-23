@@ -314,6 +314,7 @@ body {
   inset: 0;
   pointer-events: none;
   overflow: hidden;
+  z-index: 10;
 }
 
 .float-item {
@@ -329,6 +330,48 @@ body {
 .float-item.particle {
   font-size: 28px;
   animation: floatPop 0.9s ease-out forwards;
+}
+
+.float-item.auto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 700;
+  animation: floatUpAuto 1.4s ease-out forwards;
+}
+
+.float-item.auto .float-amount {
+  font-size: 16px;
+  color: #2abfa0;
+  text-shadow: 0 1px 0 #fff, 0 0 8px rgba(42, 191, 160, 0.5);
+  white-space: nowrap;
+}
+
+.float-item.auto .float-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #1a8a72;
+  text-shadow: 0 1px 0 #fff;
+  white-space: nowrap;
+  opacity: 0.9;
+}
+
+@keyframes floatUpAuto {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20%) scale(0.75);
+  }
+  15% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -140%) scale(0.9);
+  }
 }
 
 @keyframes floatUp {
