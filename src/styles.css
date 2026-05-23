@@ -802,7 +802,66 @@ body {
   box-shadow: 0 1px 0 #b53066;
 }
 
-.modal.unlock .sparkle {
+/* Unlock banner */
+.unlock-banner {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #fff0f7 0%, #fff8e7 100%);
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 20px rgba(255, 111, 165, 0.35);
+  pointer-events: none;
+  animation: bannerSlideIn 0.4s cubic-bezier(0.18, 1.4, 0.45, 1) forwards,
+             bannerFadeOut 0.4s ease-in forwards;
+  animation-delay: 0s, 3.6s;
+}
+
+.unlock-banner-sparkle {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.unlock-banner-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.unlock-banner-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.unlock-banner-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+@keyframes bannerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bannerFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
   font-size: 48px;
   animation: sparkle 1.2s ease-in-out infinite;
 }

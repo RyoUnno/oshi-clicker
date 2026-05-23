@@ -146,13 +146,14 @@ export function App() {
         </main>
 
         <BottomTabs active={tab} onChange={setTab} />
+
+        {unlockEvent && (
+          <UnlockModal unlockedCostumeId={unlockEvent} onClose={clearUnlockEvent} />
+        )}
       </div>
 
       {offlineReward && (
         <OfflineRewardModal reward={offlineReward} onClose={clearOfflineReward} />
-      )}
-      {unlockEvent && (
-        <UnlockModal unlockedCostumeId={unlockEvent} onClose={clearUnlockEvent} />
       )}
     </div>
   );
