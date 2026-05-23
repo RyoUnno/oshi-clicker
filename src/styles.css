@@ -338,6 +338,8 @@ body {
   align-items: center;
   font-weight: 700;
   animation: floatUpAuto 1.4s ease-out forwards;
+  /* 端に寄せた際に画面外にはみ出さないよう transform を上書き */
+  transform: translate(0, -50%);
 }
 
 .float-item.auto .float-amount {
@@ -359,18 +361,18 @@ body {
 @keyframes floatUpAuto {
   0% {
     opacity: 0;
-    transform: translate(-50%, -20%) scale(0.75);
+    transform: translate(0, -10%) scale(0.75);
   }
   15% {
     opacity: 0.9;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(0, -40%) scale(1);
   }
   80% {
     opacity: 0.8;
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -140%) scale(0.9);
+    transform: translate(0, -130%) scale(0.9);
   }
 }
 

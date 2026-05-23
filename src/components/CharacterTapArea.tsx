@@ -61,12 +61,13 @@ export function CharacterTapArea({ costumeId, onTap, isPcGlowing, isFever, onAct
     const id = window.setInterval(() => {
       const sources = autoSourcesRef.current;
       if (sources.length === 0) return;
-      const count = sources.length;
       const newItems: FloatingTextItem[] = sources.map((src, i) => {
-        const xPct = count === 1
-          ? 35 + Math.random() * 30
-          : 15 + (i / (count - 1)) * 70 + (Math.random() - 0.5) * 12;
-        const yPct = 42 + Math.random() * 22;
+        // 左端か右端のどちらかに交互に配置してキャラと被らないようにする
+        const onRight = i % 2 === 0;
+        const xPct = onRight
+          ? 80 + Math.random() * 12   // 右端 80〜92%
+          : 5 + Math.random() * 12;   // 左端 5〜17%
+        const yPct = 40 + (i * 12) % 40 + Math.random() * 8;
         const emoji = src.type === "pointsPerSecond" ? "💫" : "👥";
         return {
           id: ++idRef.current,
@@ -88,14 +89,15 @@ export function CharacterTapArea({ costumeId, onTap, isPcGlowing, isFever, onAct
 
 
   useEffect(() => {
-    if (isPcGlowing && !isFever && !bubble) {
-      setBubble(randomBubbleStyle());
-    }
     if (!isPcGlowing) {
-      // グロー終了 = 泡が自然消滅した場合（タップされなかった）
       setBubble(null);
+      return;
     }
-  }, [isPcGlowing, isFever, bubble]);
+    if (!isFever) {
+      // 同一グロー期間中に複数の泡が生成されないよう関数形式で確認
+      setBubble((prev) => prev ?? randomBubbleStyle());
+    }
+  }, [isPcGlowing, isFever]);
 
   const handleTap = useCallback(
     (clientX: number, clientY: number, rect: DOMRect) => {
