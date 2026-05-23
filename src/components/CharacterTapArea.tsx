@@ -207,7 +207,7 @@ export function CharacterTapArea({ costumeId, onTap, isPcGlowing, isFever, onAct
           role="button"
           aria-label="泡をタップ！"
         >
-          🫧
+          <div className="fever-bubble-inner" />
         </div>
       )}
 
