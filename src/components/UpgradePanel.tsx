@@ -9,11 +9,24 @@ interface Props {
 }
 
 const SECTIONS: { effectType: EffectType; label: string }[] = [
-  { effectType: "tapPower",        label: "👆 タップ" },
-  { effectType: "pointsPerSecond", label: "💫 応援ポイント" },
-  { effectType: "fansPerSecond",   label: "👥 ファン" },
-  { effectType: "globalMultiplier",label: "⚡ 全体倍率" },
+  { effectType: "tapPower",         label: "👆 タップ" },
+  { effectType: "pointsPerSecond",  label: "💫 応援ポイント" },
+  { effectType: "fansPerSecond",    label: "👥 ファン" },
+  { effectType: "globalMultiplier", label: "⚡ 全体倍率" },
 ];
+
+function effectLabel(effectType: EffectType, effectValue: number): string {
+  switch (effectType) {
+    case "tapPower":
+      return `+${formatNumber(effectValue)} ポイント/タップ`;
+    case "pointsPerSecond":
+      return `+${formatNumber(effectValue)} ポイント/秒`;
+    case "fansPerSecond":
+      return `+${formatNumber(effectValue)} ファン/秒`;
+    case "globalMultiplier":
+      return `全効果 ×${formatNumber(1 + effectValue)} (+${Math.round(effectValue * 100)}%)`;
+  }
+}
 
 export function UpgradePanel({ state, onBuy }: Props) {
   return (
@@ -37,6 +50,7 @@ export function UpgradePanel({ state, onBuy }: Props) {
                         {u.name} <span className="upgrade-level">Lv.{level}</span>
                       </div>
                       <div className="upgrade-desc">{u.description}</div>
+                      <div className="upgrade-effect">{effectLabel(u.effectType, u.effectValue)}</div>
                     </div>
                     <button
                       className={`buy-btn ${canBuy ? "" : "disabled"}`}

@@ -541,6 +541,13 @@ body {
   margin-top: 2px;
 }
 
+.upgrade-effect {
+  font-size: 12px;
+  font-weight: 700;
+  color: #2abfa0;
+  margin-top: 3px;
+}
+
 .buy-btn {
   border: none;
   border-radius: 14px;
